@@ -101,16 +101,16 @@ if config_env() == :prod do
             end
           end)
           |> then(fn config ->
-            if starttls? do
-              config
-              |> Keyword.put(:tls, :always)
-              |> Keyword.put(
-                :tls_options,
-                :tls_certificate_check.options(host) ++ [versions: [:"tlsv1.2"]]
-              )
-            else
-              config
-            end
+        if starttls? do
+          config
+          |> Keyword.put(:tls, :if_available)  # Ändert TLS von "always" auf "optional"
+          |> Keyword.put(
+            :tls_options,
+            [verify: :verify_none, versions: [:"tlsv1.2"]]
+          )
+        else
+          config
+        end
           end)
       end
 
